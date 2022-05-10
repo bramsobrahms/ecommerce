@@ -28,6 +28,7 @@ class Categories
 
     /**
      * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="categories")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $parent;
 
