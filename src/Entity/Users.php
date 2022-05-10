@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\CreatedAtTrait;
 use App\Repository\UsersRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,6 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class Users implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    use CreatedAtTrait;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -62,11 +64,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=150)
      */
     private $city;
-
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
-    private $created_at;
 
     /**
      * @ORM\OneToMany(targetEntity=Orders::class, mappedBy="users")
