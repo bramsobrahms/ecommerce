@@ -242,7 +242,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->is_verified = $is_verified;
 
-        return $is_verified;
+        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
