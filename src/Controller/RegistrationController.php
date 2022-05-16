@@ -102,4 +102,51 @@ class RegistrationController extends AbstractController
         return $this->redirectToRoute('app_login');
 
     }
+
+    /**
+     * @Route("/resendVerify", name="resend_verif")
+     */
+    public function resendVerif(JWTService $jwt, SendMailService $mail, UsersRepository $user): Response
+    {
+        $user = $this->getUser();
+
+        if(!$user){
+            $this->addFlash('danger', 'Vous devez vous être connecté pour accéder à cette page');
+            return $this->redirectToRoute('app_login');
+        }
+
+        if($user->getIsVerified()){
+            $this->addFlash('warning', 'Cet utilisateur est déja activé');
+            return $this->redirectToRoute('products_index');
+        }
+
+        // Create header
+        $header = [
+            'alg' => 'HS256',
+            'type' => 'JWT'
+        ];
+        
+        //Create payload
+        $payload = [
+            'user_id' => $user->getId()
+        ];
+        
+        // Generate Token
+        $token = $jwt->generate($header, $payload, $this->getparameter('app.jwtsecret'));
+        
+        //Sent a mail
+        $mail->send(
+            'no-reply@monsite.com',
+            $user->getEmail(),
+            'Activation de votre compte sur le site e-commerce',
+            'register',
+            [
+                'user' => $user,
+                'token' => $token
+            ]
+        );
+
+        $this->addFlash('success', 'Email de vérification envoyé');
+        return $this->redirectToRoute('products_index');
+    }
 }
