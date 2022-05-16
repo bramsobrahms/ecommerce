@@ -19,6 +19,17 @@
 	</head>
 	<body>
         {% include "nav/nav.html.twig" %}
+		
+		{% if app.user and app.user.isVerified == false %}
+			<div class="alert alert-warning alert-dismissible" role="alert">
+				<button type="button" class="btn-close" data-bs-dismiss="alert" arial-label="close"></button>
+				<div class="alert-message">
+					<strong>Votre compte n'est pas activé</strong>, renvoyer le lien d'activation
+				</div>
+			</div>
+		{% endif %}
+		{% include "flash/flash.html.twig" %}
+
 		{% block body %}{% endblock %}
         {% include "footer/footer.html.twig" %}
 	</body>
